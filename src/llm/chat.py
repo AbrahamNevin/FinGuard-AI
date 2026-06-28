@@ -20,3 +20,5 @@ def chat(user_message: str):
     )
 
     return response.choices[0].message.contents
+
+    
