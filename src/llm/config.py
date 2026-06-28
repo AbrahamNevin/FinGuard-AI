@@ -1,3 +1,3 @@
-MODEL_NAME = "gpt-4.1-mini"
+MODEL_NAME = "gemini-2.5-flash"
 TEMPERATURE = 0.2
-MAX_TOKENS = 500
+MAX_OUTPUT_TOKENS = 512
