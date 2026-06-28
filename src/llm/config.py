@@ -1,0 +1,3 @@
+MODEL_NAME = "gpt-4.1-mini"
+TEMPERATURE = 0.2
+MAX_TOKENS = 500

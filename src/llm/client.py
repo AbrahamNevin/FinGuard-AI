@@ -1,25 +1,18 @@
+# src/llm/client.py
+
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-print("Step 1: Loading .env")
-
+# Load environment variables from .env
 load_dotenv()
 
-print("Step 2: Reading API Key")
-
+# Read the API key
 api_key = os.getenv("OPENAI_API_KEY")
 
-print("API Key Found:", api_key is not None)
-
-if api_key:
-    print("First 10 characters:", api_key[:10])
-
+# Check if the key exists
 if not api_key:
-    raise ValueError("OPENAI_API_KEY not found")
+    raise ValueError("OPENAI_API_KEY not found in .env file")
 
-print("Step 3: Creating OpenAI Client")
-
+# Create the OpenAI client
 client = OpenAI(api_key=api_key)
-
-print("Step 4: Client Created Successfully")
