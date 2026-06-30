@@ -5,8 +5,7 @@ Central registry for all tools
 available to FinGuard AI.
 """
 
-from src.llm.tools import credit_risk_tool
-
+from src.agent.tools import credit_risk_tool
 
 # -----------------------------------------
 # TOOL REGISTRY
