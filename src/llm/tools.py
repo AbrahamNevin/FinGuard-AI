@@ -1,9 +1,18 @@
-# src/llm/tools.py
+"""
+tools.py
+
+All tools available to FinGuard AI.
+"""
+
+from src.services.prediction_service import predict_credit_risk
 
 
-def predict_transaction(transaction):
+def credit_risk_tool(user_input: dict):
     """
-    This function will later call
-    your fraud prediction model.
+    Tool that predicts
+    customer's credit risk.
     """
-    pass
+
+    result = predict_credit_risk(user_input)
+
+    return result
