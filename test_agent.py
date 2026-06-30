@@ -1,8 +1,8 @@
-from src.llm.chat import chat
-from src.llm.tools import credit_risk_tool
+from src.llm.agent import FinGuardAgent
 
 
-sample_customer = {
+customer = {
+
     "LIMIT_BAL": 20000,
     "SEX": 2,
     "EDUCATION": 2,
@@ -26,14 +26,16 @@ sample_customer = {
     "PAY_AMT4": 0,
     "PAY_AMT5": 0,
     "PAY_AMT6": 0
+
 }
 
-prediction = credit_risk_tool(sample_customer)
 
-response = chat(
-    "Explain this customer's credit risk.",
-    prediction
-)
+agent = FinGuardAgent()
 
-print("\n===== FinGuard AI =====\n")
+response = agent.run(customer)
+
+print("\n==============================")
+print("FinGuard AI")
+print("==============================\n")
+
 print(response)
