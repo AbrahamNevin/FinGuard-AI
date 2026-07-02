@@ -9,6 +9,7 @@ from src.agent.registry import get_tool
 from src.agent.llm_adapter import LLMAdapter
 from src.services.report_service import build_credit_report
 
+
 class FinGuardAgent:
 
     def __init__(self):
@@ -19,35 +20,29 @@ class FinGuardAgent:
 
     # --------------------------------------------------
 
-    def execute_tool(
-        self,
-        tool_name: str,
-        **kwargs
-    ):
+    def execute_tool(self, tool_name: str, **kwargs):
 
         tool = get_tool(tool_name)
 
         if tool is None:
-
-            raise ValueError(
-                f"Unknown Tool: {tool_name}"
-            )
+            raise ValueError(f"Unknown Tool: {tool_name}")
 
         return tool(**kwargs)
 
     # --------------------------------------------------
-def explain_prediction(
-    self,
-    prediction_result: dict,
-    shap_result: dict
-):
 
-    report = build_credit_report(
-        prediction_result,
-        shap_result
-    )
+    def explain_prediction(
+        self,
+        prediction_result: dict,
+        shap_result: dict
+    ):
 
-    prompt = f"""
+        report = build_credit_report(
+            prediction_result,
+            shap_result
+        )
+
+        prompt = f"""
 You are FinGuard AI.
 
 Below is a structured machine learning report.
@@ -67,35 +62,37 @@ Your task is to:
 "This explanation is generated from a machine learning model and should support—not replace—human decision making."
 """
 
-    return self.llm.generate(prompt)
+        return self.llm.generate(prompt)
 
     # --------------------------------------------------
 
-    def chat(self, user_message: str, customer_data: dict | None = None):
+    def chat(
+        self,
+        user_message: str,
+        customer_data: dict | None = None
+    ):
 
         intent = detect_intent(user_message)
 
         print(f"Detected Intent: {intent}")
 
-        # ----------------------------------------------
+        # -----------------------------
 
         if intent == Intent.GENERAL:
 
             return self.llm.generate(user_message)
 
-        # ----------------------------------------------
+        # -----------------------------
 
         elif intent == Intent.PREDICTION:
 
             if customer_data is None:
 
-                return (
-                    "Please provide customer data "
-                    "for prediction."
-                )
+                return "Please provide customer data for prediction."
+
             prediction = self.execute_tool(
                 "credit_risk",
-                **customer_data 
+                **customer_data
             )
 
             shap_result = self.execute_tool(
@@ -103,22 +100,17 @@ Your task is to:
                 customer_data=customer_data
             )
 
-            report = self.explain_prediction(
+            return self.explain_prediction(
                 prediction,
                 shap_result
             )
 
-            return report
-
-        # ----------------------------------------------
+        # -----------------------------
 
         elif intent == Intent.EXPLANATION:
 
-            return (
-                "SHAP explanation tool "
-                "will be implemented in Phase 4."
-            )
+            return "Explanation endpoint is under development."
 
-        # ----------------------------------------------
+        # -----------------------------
 
         return "Unable to determine intent."
