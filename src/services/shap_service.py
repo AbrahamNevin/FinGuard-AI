@@ -1,3 +1,5 @@
+from src.utils.feature_metadata import FEATURE_METADATA
+
 """
 shap_service.py
 
@@ -85,14 +87,25 @@ def explain_prediction(customer_data: dict):
         feature_columns,
         shap_values.values[0]
     ):
+        metadata = FEATURE_METADATA.get(
+            feature,
+            {
+                "name": feature,
+                "description": ""
+            }
+        )
 
         explanation.append({
 
             "feature": feature,
 
-            "impact": float(value)
+    "display_name": metadata["name"],
 
-        })
+    "description": metadata["description"],
+
+    "impact": float(value)
+
+})
 
     # -------------------------------------
     # Sort by absolute importance
