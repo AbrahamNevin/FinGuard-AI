@@ -6,14 +6,13 @@ available to FinGuard AI.
 """
 
 from src.agent.tools import credit_risk_tool
-
-# -----------------------------------------
-# TOOL REGISTRY
-# -----------------------------------------
+from src.agent.shap_tool import shap_tool
 
 TOOL_REGISTRY = {
 
     "credit_risk": credit_risk_tool,
+
+    "shap": shap_tool,
 
 }
 

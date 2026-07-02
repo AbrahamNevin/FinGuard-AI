@@ -39,22 +39,38 @@ class FinGuardAgent:
 
     def explain_prediction(
         self,
-        prediction_result: dict
+        prediction_result: dict,
+        shap_result: dict
     ):
+        """
+        Generate a natural language explanation using
+        both the prediction and SHAP feature importance.
+        """
 
         prompt = f"""
-You are FinGuard AI.
+    You are FinGuard AI, an explainable credit risk assistant.
 
-Explain this prediction in simple language.
+    Below is the machine learning prediction.
 
-Prediction Result:
+    Prediction Result:
+    {prediction_result}
 
-{prediction_result}
+    SHAP Explanation:
+    {shap_result}
 
-Explain what the prediction means.
+    Your task:
 
-Do NOT give financial advice.
-"""
+    1. State whether the customer is likely to default.
+    2. Mention the probability of default.
+    3. Explain the most important factors that increased the risk.
+    4. Explain the factors that reduced the risk.
+    5. Keep the explanation concise and professional.
+    6. Do NOT provide financial advice.
+    7. Do NOT invent reasons that are not present in the SHAP data.
+    8. End with the disclaimer:
+
+    "This explanation is generated from a machine learning model and should support—not replace—human decision making."
+    """
 
         return self.llm.generate(prompt)
 
@@ -82,20 +98,22 @@ Do NOT give financial advice.
                     "Please provide customer data "
                     "for prediction."
                 )
-
             prediction = self.execute_tool(
-
                 "credit_risk",
-
-                **customer_data
-
+                **customer_data 
             )
 
-            explanation = self.explain_prediction(
-                prediction
+            shap_result = self.execute_tool(
+                "shap",
+                customer_data=customer_data
             )
 
-            return explanation
+            report = self.explain_prediction(
+                prediction,
+                shap_result
+            )
+
+            return report
 
         # ----------------------------------------------
 
