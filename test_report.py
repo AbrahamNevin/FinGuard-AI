@@ -1,4 +1,8 @@
-from src.agent.agent import FinGuardAgent
+from pprint import pprint
+
+from src.services.prediction_service import predict_credit_risk
+from src.services.shap_service import explain_prediction
+from src.services.report_service import build_credit_report
 
 
 customer = {
@@ -29,16 +33,13 @@ customer = {
 
 }
 
-agent = FinGuardAgent()
+prediction = predict_credit_risk(customer)
 
-print("\n----------------------------")
+shap_result = explain_prediction(customer)
 
-response = agent.chat(
-
-    "Predict this customer's credit risk.",
-
-    customer
-
+report = build_credit_report(
+    prediction,
+    shap_result
 )
 
-print(response)
+print(report)
