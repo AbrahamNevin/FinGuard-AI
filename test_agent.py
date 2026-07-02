@@ -29,23 +29,16 @@ customer = {
 
 }
 
-
 agent = FinGuardAgent()
 
-result = agent.predict_customer(customer)
+print("\n----------------------------")
 
-print()
+response = agent.chat(
 
-print("Prediction")
+    "Predict this customer's credit risk.",
 
-print("----------------")
+    customer
 
-print(result["prediction"])
+)
 
-print()
-
-print("Explanation")
-
-print("----------------")
-
-print(result["explanation"])
+print(response)

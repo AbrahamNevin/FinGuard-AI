@@ -4,14 +4,12 @@ agent.py
 Main AI Agent for FinGuard AI.
 """
 
+from src.agent.intent import detect_intent, Intent
 from src.agent.registry import get_tool
 from src.agent.llm_adapter import LLMAdapter
 
 
 class FinGuardAgent:
-    """
-    Main orchestrator for FinGuard AI.
-    """
 
     def __init__(self):
 
@@ -19,7 +17,7 @@ class FinGuardAgent:
 
         print("✅ FinGuard Agent Initialized")
 
-    # ------------------------------------
+    # --------------------------------------------------
 
     def execute_tool(
         self,
@@ -37,7 +35,7 @@ class FinGuardAgent:
 
         return tool(**kwargs)
 
-    # ------------------------------------
+    # --------------------------------------------------
 
     def explain_prediction(
         self,
@@ -49,40 +47,65 @@ You are FinGuard AI.
 
 Explain this prediction in simple language.
 
-Prediction Result
+Prediction Result:
 
 {prediction_result}
 
-Keep the explanation professional.
+Explain what the prediction means.
 
-Avoid financial advice.
+Do NOT give financial advice.
 """
 
         return self.llm.generate(prompt)
 
-    # ------------------------------------
+    # --------------------------------------------------
 
-    def predict_customer(
-        self,
-        customer_data: dict
-    ):
+    def chat(self, user_message: str, customer_data: dict | None = None):
 
-        prediction = self.execute_tool(
+        intent = detect_intent(user_message)
 
-            "credit_risk",
+        print(f"Detected Intent: {intent}")
 
-            **customer_data
+        # ----------------------------------------------
 
-        )
+        if intent == Intent.GENERAL:
 
-        explanation = self.explain_prediction(
-            prediction
-        )
+            return self.llm.generate(user_message)
 
-        return {
+        # ----------------------------------------------
 
-            "prediction": prediction,
+        elif intent == Intent.PREDICTION:
 
-            "explanation": explanation
+            if customer_data is None:
 
-        }
+                return (
+                    "Please provide customer data "
+                    "for prediction."
+                )
+
+            prediction = self.execute_tool(
+
+                "credit_risk",
+
+                **customer_data
+
+            )
+
+            explanation = self.explain_prediction(
+                prediction
+            )
+
+            return explanation
+
+        # ----------------------------------------------
+
+        elif intent == Intent.EXPLANATION:
+
+            return (
+                "SHAP explanation tool "
+                "will be implemented in Phase 4."
+            )
+
+        # ----------------------------------------------
+
+        return "Unable to determine intent."
