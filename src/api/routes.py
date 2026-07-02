@@ -9,6 +9,12 @@ from src.api.schemas import PredictionRequest, ChatRequest
 from src.services.prediction_service import predict_credit_risk
 from src.services.shap_service import explain_prediction
 from src.agent.agent import FinGuardAgent
+from src.api.schemas import (
+    PredictionRequest,
+    ChatRequest,
+    PredictionResponse,
+    ChatResponse
+)
 
 router = APIRouter()
 agent = FinGuardAgent()
@@ -32,7 +38,10 @@ def ping():
 # Predict Credit Risk
 # --------------------------------------------------
 
-@router.post("/predict")
+@router.post(
+    "/predict",
+    response_model=PredictionResponse
+)
 def predict(request: PredictionRequest):
 
     customer = request.customer.model_dump()
@@ -66,7 +75,10 @@ def explain(request: PredictionRequest):
 # Chat Endpoint
 # --------------------------------------------------
 
-@router.post("/chat")
+@router.post(
+    "/chat",
+    response_model=ChatResponse
+)
 def chat(request: ChatRequest):
 
     customer = None

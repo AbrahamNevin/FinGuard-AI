@@ -66,3 +66,22 @@ class ChatRequest(BaseModel):
     message: str
 
     customer: CustomerData | None = None
+
+# ---------------------------------------------
+# Response Models
+# ---------------------------------------------
+
+class PredictionResponse(BaseModel):
+
+    success: bool
+
+    prediction: int
+
+    probability_default: float
+
+    probability_non_default: float
+
+
+class ChatResponse(BaseModel):
+
+    response: str
