@@ -7,7 +7,7 @@ Main AI Agent for FinGuard AI.
 from src.agent.intent import detect_intent, Intent
 from src.agent.registry import get_tool
 from src.agent.llm_adapter import LLMAdapter
-
+from src.services.report_service import build_credit_report
 
 class FinGuardAgent:
 
@@ -36,43 +36,38 @@ class FinGuardAgent:
         return tool(**kwargs)
 
     # --------------------------------------------------
+def explain_prediction(
+    self,
+    prediction_result: dict,
+    shap_result: dict
+):
 
-    def explain_prediction(
-        self,
-        prediction_result: dict,
-        shap_result: dict
-    ):
-        """
-        Generate a natural language explanation using
-        both the prediction and SHAP feature importance.
-        """
+    report = build_credit_report(
+        prediction_result,
+        shap_result
+    )
 
-        prompt = f"""
-    You are FinGuard AI, an explainable credit risk assistant.
+    prompt = f"""
+You are FinGuard AI.
 
-    Below is the machine learning prediction.
+Below is a structured machine learning report.
 
-    Prediction Result:
-    {prediction_result}
+{report}
 
-    SHAP Explanation:
-    {shap_result}
+Your task is to:
 
-    Your task:
+1. Explain the prediction in simple English.
+2. Mention the probability.
+3. Explain why the positive features increased the risk.
+4. Explain why the negative features reduced the risk.
+5. Never invent new reasons.
+6. Do not provide financial advice.
+7. End with this disclaimer:
 
-    1. State whether the customer is likely to default.
-    2. Mention the probability of default.
-    3. Explain the most important factors that increased the risk.
-    4. Explain the factors that reduced the risk.
-    5. Keep the explanation concise and professional.
-    6. Do NOT provide financial advice.
-    7. Do NOT invent reasons that are not present in the SHAP data.
-    8. End with the disclaimer:
+"This explanation is generated from a machine learning model and should support—not replace—human decision making."
+"""
 
-    "This explanation is generated from a machine learning model and should support—not replace—human decision making."
-    """
-
-        return self.llm.generate(prompt)
+    return self.llm.generate(prompt)
 
     # --------------------------------------------------
 
