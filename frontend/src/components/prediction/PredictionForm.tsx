@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import BillAmountSection from "./BillAmountSection";
 
 import {
     customerSchema,
@@ -10,8 +11,11 @@ import {
 } from "@/lib/validation";
 
 import CustomerSection from "./CustomerSection";
-import ResultCard from "@/components/results/ResultCard";
+import PaymentHistorySection from "./PaymentHistorySection";
+
 import { predictRisk } from "@/services/api/api";
+
+import ResultCard from "@/components/results/ResultCard";
 
 export default function PredictionForm() {
 
@@ -24,6 +28,20 @@ export default function PredictionForm() {
             LIMIT_BAL: 100000,
             EDUCATION: 2,
             MARRIAGE: 1,
+
+            PAY_0: 0,
+            PAY_2: 0,
+            PAY_3: 0,
+            PAY_4: 0,
+            PAY_5: 0,
+            PAY_6: 0,
+
+            BILL_AMT1: 5000,
+            BILL_AMT2: 5000,
+            BILL_AMT3: 5000,
+            BILL_AMT4: 5000,
+            BILL_AMT5: 5000,
+            BILL_AMT6: 5000,
         },
     });
 
@@ -38,7 +56,6 @@ export default function PredictionForm() {
             console.log("Backend Response:");
             console.log(response);
 
-            // Adjust this depending on your backend response
             setResult(response.response);
 
         } catch (error) {
@@ -56,7 +73,17 @@ export default function PredictionForm() {
             className="space-y-8"
         >
 
-            <CustomerSection form={form} />
+            <CustomerSection
+                form={form}
+            />
+
+            <PaymentHistorySection
+                form={form}
+            />
+
+            <BillAmountSection
+                form={form}
+            />
 
             <button
                 type="submit"
@@ -67,17 +94,19 @@ export default function PredictionForm() {
                     py-3
                     text-white
                     hover:bg-slate-800
-                    transition
                 "
             >
                 Predict Risk
             </button>
 
             {result && (
-                <ResultCard response={result} />
+                <ResultCard
+                    response={result}
+                />
             )}
 
         </form>
 
     );
+
 }
