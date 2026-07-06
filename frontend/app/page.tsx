@@ -5,15 +5,18 @@ import QuickActionCard from "@/components/dashboard/QuickActionCard";
 import StatCard from "@/components/dashboard/StatCard";
 
 export default function HomePage() {
+
   return (
+
     <DashboardLayout>
+
       <div className="space-y-8">
 
         <WelcomeCard />
 
         <QuickActionCard />
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3">
 
           <StatCard
             title="Total Assessments"
@@ -33,6 +36,9 @@ export default function HomePage() {
         </div>
 
       </div>
+
     </DashboardLayout>
+
   );
+
 }
