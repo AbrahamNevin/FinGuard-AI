@@ -1,16 +1,9 @@
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import PredictionForm from "@/components/prediction/PredictionForm";
 
 export default function PredictionPage() {
-
     return (
-
-        <DashboardLayout>
-
+        <main className="max-w-5xl mx-auto p-10">
             <PredictionForm />
-
-        </DashboardLayout>
-
+        </main>
     );
-
 }

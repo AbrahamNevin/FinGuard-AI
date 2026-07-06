@@ -1,48 +1,69 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+"use client";
 
-export default function CustomerSection() {
+import { UseFormReturn } from "react-hook-form";
+
+import {
+
+    CustomerForm,
+
+} from "@/lib/validation";
+
+import FormField from "@/components/common/FormField";
+
+interface Props {
+
+    form: UseFormReturn<CustomerForm>;
+
+}
+
+export default function CustomerSection({
+
+    form,
+
+}: Props) {
+
     return (
-        <Card>
 
-            <CardHeader>
+        <div className="grid gap-6 md:grid-cols-2">
 
-                <CardTitle>
+            <FormField
 
-                    Customer Information
+                label="Age"
 
-                </CardTitle>
+                placeholder="Enter age"
 
-            </CardHeader>
+                type="number"
 
-            <CardContent className="grid gap-6 md:grid-cols-2">
+                registration={form.register("AGE", {
 
-                <div>
+                    valueAsNumber: true,
 
-                    <label className="mb-2 block text-sm font-medium">
+                })}
 
-                        Age
+                error={form.formState.errors.AGE?.message}
 
-                    </label>
+            />
 
-                    <Input placeholder="Enter customer age" />
+            <FormField
 
-                </div>
+                label="Credit Limit"
 
-                <div>
+                placeholder="Enter credit limit"
 
-                    <label className="mb-2 block text-sm font-medium">
+                type="number"
 
-                        Gender
+                registration={form.register("LIMIT_BAL", {
 
-                    </label>
+                    valueAsNumber: true,
 
-                    <Input placeholder="Male / Female" />
+                })}
 
-                </div>
+                error={form.formState.errors.LIMIT_BAL?.message}
 
-            </CardContent>
+            />
 
-        </Card>
+        </div>
+
     );
+
 }
