@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import BillAmountSection from "./BillAmountSection";
+import PaymentAmountSection from "./PaymentAmountSection";
 
 import {
     customerSchema,
@@ -42,25 +43,39 @@ export default function PredictionForm() {
             BILL_AMT4: 5000,
             BILL_AMT5: 5000,
             BILL_AMT6: 5000,
+
+            PAY_AMT1: 1000,
+            PAY_AMT2: 1000,
+            PAY_AMT3: 1000,
+            PAY_AMT4: 1000,
+            PAY_AMT5: 1000,
+            PAY_AMT6: 1000,
         },
     });
 
     const [result, setResult] = useState("");
-
+    const [loading, setLoading] = useState(false);
     async function onSubmit(data: CustomerForm) {
+
+        setLoading(true);
 
         try {
 
             const response = await predictRisk(data);
 
-            console.log("Backend Response:");
             console.log(response);
 
             setResult(response.response);
 
         } catch (error) {
 
-            console.error("Prediction Error:", error);
+            console.error(error);
+
+            alert("Prediction failed.");
+
+        } finally {
+
+            setLoading(false);
 
         }
 
@@ -85,18 +100,29 @@ export default function PredictionForm() {
                 form={form}
             />
 
+            <PaymentAmountSection
+                form={form}
+            />
+
             <button
                 type="submit"
+                disabled={loading}
                 className="
-                    rounded-lg
-                    bg-slate-900
-                    px-6
-                    py-3
-                    text-white
-                    hover:bg-slate-800
-                "
+        rounded-lg
+        bg-slate-900
+        px-6
+        py-3
+        text-white
+        transition
+        hover:bg-slate-800
+        disabled:opacity-50
+    "
             >
-                Predict Risk
+
+                {loading
+                    ? "Predicting..."
+                    : "Predict Credit Risk"}
+
             </button>
 
             {result && (
