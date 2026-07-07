@@ -82,6 +82,12 @@ class PredictionResponse(BaseModel):
     probability_non_default: float
 
 
+from typing import Any
+
 class ChatResponse(BaseModel):
 
-    response: str
+    prediction: dict[str, Any]
+
+    shap: dict[str, Any]
+
+    llm_response: str

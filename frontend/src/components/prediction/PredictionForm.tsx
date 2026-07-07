@@ -14,7 +14,10 @@ import {
 import CustomerSection from "./CustomerSection";
 import PaymentHistorySection from "./PaymentHistorySection";
 
-import { predictRisk } from "@/services/api/api";
+import {
+    predictRisk,
+    explainPrediction,
+} from "@/services/api/api";
 
 import ResultCard from "@/components/results/ResultCard";
 
@@ -53,7 +56,7 @@ export default function PredictionForm() {
         },
     });
 
-    const [result, setResult] = useState("");
+    const [result, setResult] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     async function onSubmit(data: CustomerForm) {
 
@@ -61,21 +64,23 @@ export default function PredictionForm() {
 
         try {
 
-            const response = await predictRisk(data);
+            // Step 1: Get prediction
+            const prediction = await predictRisk(data);
 
-            console.log("Full API response:", response);
-            console.log("response.response =", response.response);
+            // Step 2: Get SHAP explanation
+            const explanation = await explainPrediction(data);
 
+            console.log("Prediction:", prediction);
+            console.log("Explanation:", explanation);
 
-
-            console.log(response);
-
-            setResult(response.response);
+            setResult({
+                prediction,
+                explanation,
+            });
 
         } catch (error) {
 
             console.error(error);
-
             alert("Prediction failed.");
 
         } finally {

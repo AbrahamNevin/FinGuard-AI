@@ -92,4 +92,4 @@ def chat(request: ChatRequest):
         customer
     )
 
-    return {"response": response}
+    return response

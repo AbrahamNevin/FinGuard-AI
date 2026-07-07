@@ -105,10 +105,16 @@ Your task is to:
                 customer_data=customer_data
             )
 
-            return self.explain_prediction(
+            llm_response = self.explain_prediction(
                 prediction,
                 shap_result
             )
+
+            return {
+                "prediction": prediction,
+                "shap": shap_result,
+                "llm_response": llm_response
+            }
 
         # -----------------------------
 
