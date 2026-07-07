@@ -63,6 +63,11 @@ export default function PredictionForm() {
 
             const response = await predictRisk(data);
 
+            console.log("Full API response:", response);
+            console.log("response.response =", response.response);
+
+
+
             console.log(response);
 
             setResult(response.response);

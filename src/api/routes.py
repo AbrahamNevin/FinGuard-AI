@@ -75,28 +75,21 @@ def explain(request: PredictionRequest):
 # Chat Endpoint
 # --------------------------------------------------
 
-@router.post(
-    "/chat",
-    response_model=ChatResponse
-)
+@router.post("/chat")
 def chat(request: ChatRequest):
+
+    print(request)
 
     customer = None
 
     if request.customer is not None:
-
         customer = request.customer.model_dump()
 
+    print(customer)
+
     response = agent.chat(
-
         request.message,
-
         customer
-
     )
 
-    return {
-
-        "response": response
-
-    }
+    return {"response": response}
