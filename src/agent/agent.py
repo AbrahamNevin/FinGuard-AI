@@ -72,6 +72,11 @@ Your task is to:
         customer_data: dict | None = None
     ):
 
+        print("="*60)
+        print("CUSTOMER DATA RECEIVED:")
+        print(customer_data)
+        print("="*60)
+
         intent = detect_intent(user_message)
 
         print(f"Detected Intent: {intent}")
@@ -100,10 +105,16 @@ Your task is to:
                 customer_data=customer_data
             )
 
-            return self.explain_prediction(
+            llm_response = self.explain_prediction(
                 prediction,
                 shap_result
             )
+
+            return {
+                "prediction": prediction,
+                "shap": shap_result,
+                "llm_response": llm_response
+            }
 
         # -----------------------------
 
