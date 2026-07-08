@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import BillAmountSection from "./BillAmountSection";
-import PaymentAmountSection from "./PaymentAmountSection";
 
 import {
     customerSchema,
@@ -13,6 +11,8 @@ import {
 
 import CustomerSection from "./CustomerSection";
 import PaymentHistorySection from "./PaymentHistorySection";
+import BillAmountSection from "./BillAmountSection";
+import PaymentAmountSection from "./PaymentAmountSection";
 
 import {
     predictRisk,
@@ -56,31 +56,31 @@ export default function PredictionForm() {
         },
     });
 
-    const [result, setResult] = useState<any>(null);
     const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState<any>(null);
+
     async function onSubmit(data: CustomerForm) {
 
         setLoading(true);
 
         try {
 
-            // Step 1: Get prediction
             const prediction = await predictRisk(data);
 
-            // Step 2: Get SHAP explanation
-            const explanation = await explainPrediction(data);
-
-            console.log("Prediction:", prediction);
-            console.log("Explanation:", explanation);
+            const explain = await explainPrediction(data);
 
             setResult({
+
                 prediction,
-                explanation,
+
+                explanation: explain.explanation,
+
             });
 
         } catch (error) {
 
             console.error(error);
+
             alert("Prediction failed.");
 
         } finally {
@@ -98,47 +98,28 @@ export default function PredictionForm() {
             className="space-y-8"
         >
 
-            <CustomerSection
-                form={form}
-            />
+            <CustomerSection form={form} />
 
-            <PaymentHistorySection
-                form={form}
-            />
+            <PaymentHistorySection form={form} />
 
-            <BillAmountSection
-                form={form}
-            />
+            <BillAmountSection form={form} />
 
-            <PaymentAmountSection
-                form={form}
-            />
+            <PaymentAmountSection form={form} />
 
             <button
                 type="submit"
                 disabled={loading}
-                className="
-        rounded-lg
-        bg-slate-900
-        px-6
-        py-3
-        text-white
-        transition
-        hover:bg-slate-800
-        disabled:opacity-50
-    "
+                className="rounded-lg bg-slate-900 px-6 py-3 text-white hover:bg-slate-800 disabled:opacity-50"
             >
 
-                {loading
-                    ? "Predicting..."
-                    : "Predict Credit Risk"}
+                {loading ? "Predicting..." : "Predict Credit Risk"}
 
             </button>
 
             {result && (
-                <ResultCard
-                    response={result}
-                />
+
+                <ResultCard result={result} />
+
             )}
 
         </form>
