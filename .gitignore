@@ -216,3 +216,29 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Node / JS / Web
+node_modules/
+dist/
+build/
+.next/
+out/
+.docusaurus/
+.cache/
+.vuepress/
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.eslintcache
+.stylelintcache
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+.vercel
